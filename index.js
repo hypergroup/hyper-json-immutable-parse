@@ -40,7 +40,7 @@ function parse(base, key, value) {
   for (var k in value) {
     if (!value.hasOwnProperty(k)) continue;
 
-    hashCode |= computeHash(k) ^ computeHash(value[k]);
+    hashCode = smi(appendHash(appendHash(hashCode, computeHash(k)), computeHash(value[k])));
 
     define(obj, k, {
       enumerable: true,
@@ -88,15 +88,19 @@ function hashNumber(number) {
     number /= 0xFFFFFFFF;
     hash ^= number;
   }
-  return hash;
+  return smi(hash);
 }
 
 function hashString(string) {
   var hash = 0;
   for (var i = 0, l = string.length; i < l; i++) {
-    hash = 31 * hash + string.charCodeAt(i) | 0;
+    hash = appendHash(hash, string.charCodeAt(i));
   }
   return smi(hash);
+}
+
+function appendHash(hash, code) {
+  return 31 * hash + code | 0;
 }
 
 function smi(i32) {
