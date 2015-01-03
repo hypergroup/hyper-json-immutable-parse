@@ -1,0 +1,27 @@
+{
+  "name": "hyper-json-immutable-parse",
+  "version": "0.1.0",
+  "description": "parse a hyper+json document into an immutable value",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hypergroup/hyper-json-immutable-parse.git"
+  },
+  "keywords": [
+    "hyper",
+    "json"
+  ],
+  "author": "Cameron Bytheway <bytheway.cameron@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hypergroup/hyper-json-immutable-parse/issues"
+  },
+  "homepage": "https://github.com/hypergroup/hyper-json-immutable-parse",
+  "devDependencies": {
+    "mocha": "^2.1.0",
+    "should": "^4.4.2"
+  }
+}
