@@ -33,11 +33,20 @@ function parse(base, key, value) {
 
   if (!value || type !== 'object') return value;
 
+  var obj = copy(value);
+
+  if (key === '') seal(base, obj, []);
+
+  return obj;
+}
+
+function copy(value) {
   var obj = Array.isArray(value) ? immutableArray() : Object.create(null);
 
   var hashCode = 0;
-
-  for (var k in value) {
+  var keys = Object.keys(value);
+  for (var i = 0, l = keys.length, k; i < l; i++) {
+    k = keys[i];
     if (!value.hasOwnProperty(k)) continue;
 
     hashCode = smi(appendHash(appendHash(hashCode, computeHash(k)), computeHash(value[k])));
@@ -51,8 +60,6 @@ function parse(base, key, value) {
   define(obj, '__hash', {
     value: smi(hashCode)
   });
-
-  if (key === '') seal(base, obj, []);
 
   return obj;
 }
@@ -72,14 +79,11 @@ function seal(base, value, path) {
 }
 
 function computeHash(item) {
-  if (!item) return 0;
-
-  // if the child object already has it use that
+  var type = typeof item;
+  if (type === 'number') return hashNumber(item);
   if (item.__hash) return item.__hash;
-
-  return typeof item === 'number' ?
-    hashNumber(item) :
-    hashString(item);
+  if (type !== 'string') item = JSON.stringify(item);
+  return hashString(item);
 }
 
 function hashNumber(number) {
