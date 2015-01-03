@@ -35,18 +35,10 @@ function parse(base, key, value) {
 
   var obj = Array.isArray(value) ? immutableArray() : Object.create(null);
 
-  // make the href mutable so hyper-path can resolve it
-  var href = value.href
-  define(obj, 'href', {
-    enumerable: true,
-    writable: true,
-    value: href
-  });
-
-  var hashCode = computeHash(href);
+  var hashCode = 0;
 
   for (var k in value) {
-    if (k === 'href' || !value.hasOwnProperty(k)) continue;
+    if (!value.hasOwnProperty(k)) continue;
 
     hashCode |= computeHash(k) ^ computeHash(value[k]);
 
@@ -60,9 +52,23 @@ function parse(base, key, value) {
     value: smi(hashCode)
   });
 
-  Object.preventExtensions(obj);
+  if (key === '') seal(base, obj, []);
 
   return obj;
+}
+
+function seal(base, value, path) {
+  if (!value || typeof value !== 'object') return;
+
+  for (var k in value) {
+    if (k !== 'href') seal(base, value[k], path.concat([k]));
+  }
+
+  if (base && !value.href) define(value, 'href', {
+    value: base + '#/' + path.join('/')
+  });
+
+  Object.freeze(value);
 }
 
 function computeHash(item) {
