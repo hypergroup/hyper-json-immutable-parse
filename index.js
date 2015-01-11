@@ -41,7 +41,7 @@ function parse(base, key, value) {
 }
 
 function copy(value) {
-  var obj = Array.isArray(value) ? immutableArray() : Object.create(null);
+  var obj = Array.isArray(value) ? immutableArray() : {};
 
   var hashCode = 0;
   var keys = Object.keys(value);
