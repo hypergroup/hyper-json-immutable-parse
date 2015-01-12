@@ -1,6 +1,6 @@
 {
   "name": "hyper-json-immutable-parse",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "parse a hyper+json document into an immutable value",
   "main": "index.js",
   "scripts": {
