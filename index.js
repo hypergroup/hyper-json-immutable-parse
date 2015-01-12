@@ -30,7 +30,6 @@ function parse(base, key, value) {
   if (key === 'href' && type === 'string' && value.charAt(0) === '#') return base + value;
 
   // TODO resolve "/" paths
-
   if (!value || type !== 'object') return value;
 
   var obj = copy(value);
@@ -64,14 +63,19 @@ function copy(value) {
   return obj;
 }
 
-function seal(base, value, path) {
+function seal(base, value, path, shouldDefineHref) {
   if (!value || typeof value !== 'object') return;
 
+  var isCollection;
   for (var k in value) {
-    if (k !== 'href') seal(base, value[k], path.concat([k]));
+    isCollection = k === 'collection' || k === 'data';
+    seal(base,
+         value[k],
+         (isCollection ? path : path.concat([k])),
+         isCollection);
   }
 
-  if (base && !value.href) define(value, 'href', {
+  if (shouldDefineHref && base && !value.href && path.length) define(value, 'href', {
     value: base + '#/' + path.join('/')
   });
 
@@ -80,6 +84,7 @@ function seal(base, value, path) {
 
 function computeHash(item) {
   var type = typeof item;
+  if (type === 'undefined' || item === null) return 0;
   if (type === 'number') return hashNumber(item);
   if (item.__hash) return item.__hash;
   if (type !== 'string') item = JSON.stringify(item);
