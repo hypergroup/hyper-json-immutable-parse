@@ -78,7 +78,7 @@ function seal(base, value, path, shouldDefineHref) {
   if (shouldDefineHref && !value.href) {
     if (!base) console.warn('collection missing base href. unexpected behavior may occur.', value);
     else define(value, 'href', {
-      value: base + '#/' + path.join('/')
+      value: base + (path.length ? '#/' + path.join('/') : '')
     });
   }
 
