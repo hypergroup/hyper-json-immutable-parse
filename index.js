@@ -75,9 +75,12 @@ function seal(base, value, path, shouldDefineHref) {
          isCollection);
   }
 
-  if (shouldDefineHref && base && !value.href && path.length) define(value, 'href', {
-    value: base + '#/' + path.join('/')
-  });
+  if (shouldDefineHref && !value.href) {
+    if (!base) console.warn('collection missing base href. unexpected behavior may occur.', value);
+    else define(value, 'href', {
+      value: base + '#/' + path.join('/')
+    });
+  }
 
   Object.freeze(value);
 }
