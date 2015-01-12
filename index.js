@@ -34,7 +34,7 @@ function parse(base, key, value) {
 
   var obj = copy(value);
 
-  if (key === '') seal(base, obj, []);
+  if (key === '') seal(base || obj.href, obj, []);
 
   return obj;
 }
