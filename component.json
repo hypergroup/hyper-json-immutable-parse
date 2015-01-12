@@ -2,7 +2,7 @@
   "name": "hyper-json-immutable-parse",
   "repo": "hypergroup/hyper-json-immutable-parse",
   "description": "parse a hyper+json document into an immutable value",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "keywords": [],
   "dependencies": {},
   "license": "MIT",
