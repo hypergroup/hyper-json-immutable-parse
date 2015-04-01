@@ -40,7 +40,7 @@ function parse(base, key, value) {
 }
 
 function formatHref(base, href) {
-  if (href.charAt(0) === '#') return base + href;
+  if (href.charAt(0) === '#') return (base || '') + href;
 
   // sort the query params so they're consistent
   var parts = href.split('?');
@@ -86,7 +86,7 @@ function seal(base, value, path, shouldDefineHref) {
   }
 
   if (shouldDefineHref && !value.href) {
-    if (!base && process.env.NODE_ENV !== 'production') console.warn('collection missing base href. unexpected behavior may occur.', value);
+    if (!base) process.env.NODE_ENV !== 'production' && console.warn('collection missing base href. unexpected behavior may occur.', value);
     else define(value, 'href', {
       value: base + (path.length ? '#/' + path.join('/') : '')
     });
