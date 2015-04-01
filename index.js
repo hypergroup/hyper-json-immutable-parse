@@ -27,7 +27,7 @@ function parse(base, key, value) {
   var type = typeof value;
 
   // resolve local JSON pointers
-  if (key === 'href' && type === 'string' && value.charAt(0) === '#') return base + value;
+  if (key === 'href' && type === 'string') return formatHref(base, value);
 
   // TODO resolve "/" paths
   if (!value || type !== 'object') return value;
@@ -37,6 +37,16 @@ function parse(base, key, value) {
   if (key === '') seal(base || obj.href, obj, []);
 
   return obj;
+}
+
+function formatHref(base, href) {
+  if (href.charAt(0) === '#') return base + href;
+
+  // sort the query params so they're consistent
+  var parts = href.split('?');
+  var qs = parts[1] ? '?' + parts[1].split('&').sort().join('&') : '';
+
+  return parts[0] + qs;
 }
 
 function copy(value) {
@@ -76,7 +86,7 @@ function seal(base, value, path, shouldDefineHref) {
   }
 
   if (shouldDefineHref && !value.href) {
-    if (!base) console.warn('collection missing base href. unexpected behavior may occur.', value);
+    if (!base && process.env.NODE_ENV !== 'production') console.warn('collection missing base href. unexpected behavior may occur.', value);
     else define(value, 'href', {
       value: base + (path.length ? '#/' + path.join('/') : '')
     });
