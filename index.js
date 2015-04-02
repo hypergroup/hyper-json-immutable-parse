@@ -45,6 +45,7 @@ function formatHref(base, href) {
   // sort the query params so they're consistent
   var parts = href.split('?');
   var qs = parts[1] ? '?' + parts[1].split('&').sort().join('&') : '';
+  if (qs === '?') qs = '';
 
   return parts[0] + qs;
 }
