@@ -34,7 +34,7 @@ function parse(base, key, value) {
 
   var obj = copy(value);
 
-  if (key === '') seal(base || obj.href, obj, []);
+  if (key === '' || obj.href) seal(base || obj.href, obj, []);
 
   return obj;
 }
@@ -75,7 +75,7 @@ function copy(value) {
 }
 
 function seal(base, value, path, shouldDefineHref) {
-  if (!value || typeof value !== 'object') return;
+  if (!value || typeof value !== 'object' || Object.isFrozen(value)) return;
 
   var isCollection;
   for (var k in value) {
